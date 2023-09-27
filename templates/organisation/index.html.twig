@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Organisations!{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <a href="{{ path('organisation_new') }}">Add</a>
+    <h1>Organisations list</h1>
+    <ul>
+    {% for organisation in organisations %}
+        <li>#{{organisation.id}} {{ organisation.name }} 
+        <a href="{{ path('organisation_show', {'id': organisation.id}) }}">[show]</a>
+        <a href="{{ path('organisation_edit', {'id': organisation.id}) }}">[edit]</a>
+        <a href="{{ path('organisation_delete', {'id': organisation.id}) }}">[delete]</a>
+        </li/
+        </ br>
+    {% else %}
+        <p>No organisation found</p>
+    {% endfor %}
+    </ul
+</div>
+{% endblock %}

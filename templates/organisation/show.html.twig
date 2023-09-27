@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ organisation.name }}{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <a href="{{ path('organisation_edit', {id: organisation.id}) }}">[edit]</a>
+    <a href="{{ path('organisation_delete', {id: organisation.id}) }}">[delete]</a>
+    <a href="{{ path('organisation_index') }}">[list]</a>
+    <h1>Organisation: {{ organisation.name }}</h1>
+    <p>{{ organisation.description }}</p>
+    <i>Created at: {{ organisation.createdAt|date('Y-m-d H:i:s') }}</i>
+</div>
+{% endblock %}
