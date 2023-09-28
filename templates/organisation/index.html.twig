@@ -5,9 +5,28 @@
 {% block body %}
     <h1>Liste des associations</h1>
 
-    {% for organisation in organisations %}
-        {{ organisation.name }} {{ organisation.createdAt|date('d/m/Y') }} <br>
-    {% else %}
-        Aucune association enregistrée
-    {% endfor %}
+    <a href="{{ path('organisation_new') }}">Créer une association</a>
+
+    <table>
+        <tr>
+            <th>Nom</th>
+            <th>Date de création</th>
+            <th></th>
+        </tr>
+        {% for organisation in organisations %}
+            <tr>
+                <td>{{ organisation.name }}</td>
+                <td>{{ organisation.createdAt|date('d/m/Y') }}</td>
+                <th>
+                    <a href="{{ path('organisation_show', {'id': organisation.id}) }}">Voir</a>
+                    <a href="{{ path('organisation_update', {'id': organisation.id}) }}">Modifier</a>
+                    <a href="{{ path('organisation_delete', {'id': organisation.id, 'token': csrf_token('delete' ~ organisation.id)}) }}" onclick="return confirm('Souhaitez-vraiment supprimer...');">Supprimer</a>
+                </th>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucune association enregistrée</td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
