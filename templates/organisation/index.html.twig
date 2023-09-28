@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des associations{% endblock %}
+
+{% block body %}
+    <h1>Liste des associations</h1>
+
+    {% for organisation in organisations %}
+        {{ organisation.name }} {{ organisation.createdAt|date('d/m/Y') }} <br>
+    {% else %}
+        Aucune association enregistrée
+    {% endfor %}
+{% endblock %}
