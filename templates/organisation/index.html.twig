@@ -14,15 +14,16 @@
             <th></th>
         </tr>
         {% for organisation in organisations %}
-            <tr>
-                <td>{{ organisation.name }}</td>
-                <td>{{ organisation.createdAt|date('d/m/Y') }}</td>
-                <th>
+            {% embed 'composants/_card.html.twig' %}
+                {% block title %}{{ organisation.name }}{% endblock %}
+                {% block body %}
+                    {{ organisation.createdAt|date('d/m/Y') }} <br>
+
                     <a href="{{ path('organisation_show', {'id': organisation.id}) }}">Voir</a>
                     <a href="{{ path('organisation_update', {'id': organisation.id}) }}">Modifier</a>
                     <a href="{{ path('organisation_delete', {'id': organisation.id, 'token': csrf_token('delete' ~ organisation.id)}) }}" onclick="return confirm('Souhaitez-vraiment supprimer...');">Supprimer</a>
-                </th>
-            </tr>
+                {% endblock %}
+            {% endembed %}
         {% else %}
             <tr>
                 <td colspan="3">Aucune association enregistrée</td>
