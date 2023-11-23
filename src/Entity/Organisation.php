@@ -28,9 +28,17 @@ class Organisation
     #[ORM\OneToMany(mappedBy: 'organisation', targetEntity: Event::class, orphanRemoval: true)]
     private Collection $events;
 
+    #[ORM\ManyToOne(inversedBy: 'organisations')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'organisations')]
+    private Collection $members;
+
     public function __construct()
     {
         $this->events = new ArrayCollection();
+        $this->members = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -100,6 +108,42 @@ class Organisation
                 $event->setOrganisation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(User $member): static
+    {
+        if (!$this->members->contains($member)) {
+            $this->members->add($member);
+        }
+
+        return $this;
+    }
+
+    public function removeMember(User $member): static
+    {
+        $this->members->removeElement($member);
 
         return $this;
     }
