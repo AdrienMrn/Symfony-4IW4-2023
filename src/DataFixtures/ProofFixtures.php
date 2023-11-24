@@ -19,7 +19,8 @@ class ProofFixtures extends Fixture implements DependentFixtureInterface
             $proof = (new Proof())
                 ->setName('Preuve open' . $i)
                 ->setDescription($faker->paragraph)
-                ->setOwner($this->getReference('user'))
+                ->setCreatedBy($this->getReference('user'))
+                ->setUpdatedBy($this->getReference('user'))
             ;
             $manager->persist($proof);
         }
@@ -29,7 +30,8 @@ class ProofFixtures extends Fixture implements DependentFixtureInterface
             $proof = (new Proof())
                 ->setName($faker->colorName)
                 ->setDescription($faker->paragraph)
-                ->setOwner($users[array_rand($users)])
+                ->setCreatedBy($users[array_rand($users)])
+                ->setUpdatedBy($users[array_rand($users)])
             ;
             $manager->persist($proof);
         }

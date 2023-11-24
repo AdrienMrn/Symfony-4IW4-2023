@@ -7,27 +7,23 @@
 
     <a href="{{ path('back_organisation_new') }}">Créer une association</a>
 
-    <table>
-        <tr>
-            <th>Nom</th>
-            <th>Date de création</th>
-            <th></th>
-        </tr>
-        {% for organisation in organisations %}
-            {% embed 'composants/_card.html.twig' %}
-                {% block title %}{{ organisation.name }}{% endblock %}
-                {% block body %}
-                    {{ organisation.createdAt|date('d/m/Y') }} <br>
+    {% for organisation in organisations %}
+        {% embed 'composants/_card.html.twig' %}
+            {% block title %}{{ organisation.name }}{% endblock %}
+            {% block body %}
+                {{ organisation.createdAt|date('d/m/Y') }} <br>
 
-                    <a href="{{ path('back_organisation_show', {'id': organisation.id}) }}">Voir</a>
-                    <a href="{{ path('back_organisation_update', {'id': organisation.id}) }}">Modifier</a>
-                    <a href="{{ path('back_organisation_delete', {'id': organisation.id, 'token': csrf_token('delete' ~ organisation.id)}) }}" onclick="return confirm('Souhaitez-vraiment supprimer...');">Supprimer</a>
-                {% endblock %}
-            {% endembed %}
-        {% else %}
-            <tr>
-                <td colspan="3">Aucune association enregistrée</td>
-            </tr>
-        {% endfor %}
-    </table>
+                <a href="{{ path('back_organisation_show', {'id': organisation.id}) }}">Voir</a>
+                <a href="{{ path('back_organisation_update', {'slug': organisation.slug}) }}">Modifier</a>
+                <a href="{{ path('back_organisation_delete', {'slug': organisation.slug, 'token': csrf_token('delete' ~ organisation.slug)}) }}" onclick="return confirm('Souhaitez-vraiment supprimer...');">Supprimer</a>
+
+                <a href="{{ path('back_organisation_order', {'slug': organisation.slug}) }}">Up</a>
+                <a href="{{ path('back_organisation_order', {'slug': organisation.slug, 'direction': 'down'}) }}">Down</a>
+            {% endblock %}
+        {% endembed %}
+
+        <br><br>
+    {% else %}
+        <p>Aucune association n'a été trouvée.</p>
+    {% endfor %}
 {% endblock %}

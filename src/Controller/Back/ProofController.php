@@ -38,7 +38,6 @@ class ProofController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $proof->setOwner($this->getUser());
             $entityManager->persist($proof);
             $entityManager->flush();
 

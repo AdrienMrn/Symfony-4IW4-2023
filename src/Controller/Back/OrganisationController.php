@@ -16,11 +16,25 @@ class OrganisationController extends AbstractController
     #[Route('/organisation', name: 'organisation_index', methods: 'GET')]
     public function index(OrganisationRepository $organisationRepository): Response
     {
-        $organisations = $organisationRepository->findAll();
+        $organisations = $organisationRepository->findBy([], ['position' => 'ASC']);
 
         return $this->render('back/organisation/index.html.twig', [
             'organisations' => $organisations
         ]);
+    }
+
+    #[Route('/organisation/{slug}/order/{direction}', name: 'organisation_order', requirements: ['direction' => 'up|down'], defaults: ['direction' => 'up'], methods: 'GET')]
+    public function order(Organisation $organisation, string $direction, EntityManagerInterface $manager): Response
+    {
+        if ($direction === 'up') {
+            $organisation->setPosition($organisation->getPosition() - 1);
+        } else {
+            $organisation->setPosition($organisation->getPosition() + 1);
+        }
+
+        $manager->flush();
+
+        return $this->redirectToRoute('back_organisation_index');
     }
 
     #[Route('/organisation/{id}', name: 'organisation_show', requirements: ['id' => '\d{1,3}'], methods: 'GET')]
@@ -52,7 +66,7 @@ class OrganisationController extends AbstractController
         ]);
     }
 
-    #[Route('/organisation/update/{id}', name: 'organisation_update', requirements: ['id' => '\d{1,3}'], methods: ['GET', 'POST'])]
+    #[Route('/organisation/update/{slug}', name: 'organisation_update', methods: ['GET', 'POST'])]
     public function update(Organisation $organisation, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(OrganisationType::class, $organisation);
@@ -74,10 +88,10 @@ class OrganisationController extends AbstractController
         ]);
     }
 
-    #[Route('/organisation/delete/{id}/{token}', name: 'organisation_delete', requirements: ['id' => '\d{1,3}'], methods: 'GET')]
+    #[Route('/organisation/delete/{slug}/{token}', name: 'organisation_delete', methods: 'GET')]
     public function delete(Organisation $organisation, string $token, EntityManagerInterface $manager)
     {
-        if ($this->isCsrfTokenValid('delete' . $organisation->getId(), $token)) {
+        if ($this->isCsrfTokenValid('delete' . $organisation->getSlug(), $token)) {
             $manager->remove($organisation);
             $manager->flush();
 

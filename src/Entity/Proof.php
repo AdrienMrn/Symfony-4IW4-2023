@@ -5,10 +5,14 @@ namespace App\Entity;
 use App\Repository\ProofRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ProofRepository::class)]
 class Proof
 {
+    use Traits\Timestampable;
+    use Traits\Blameable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -19,10 +23,6 @@ class Proof
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
-
-    #[ORM\ManyToOne(inversedBy: 'proofs')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
 
     #[ORM\Column(options: ['default' => false])]
     private ?bool $validate = null;
@@ -57,18 +57,6 @@ class Proof
     public function setDescription(?string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getOwner(): ?User
-    {
-        return $this->owner;
-    }
-
-    public function setOwner(?User $owner): static
-    {
-        $this->owner = $owner;
 
         return $this;
     }
