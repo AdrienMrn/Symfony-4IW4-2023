@@ -19,21 +19,29 @@ class UserFixtures extends Fixture
         $users =  [
             [
                 'email' => 'user@user.fr',
-                'role' => ['ROLE_USER']
+                'role' => ['ROLE_USER'],
+                'reference' => 'user'
             ],
             [
                 'email' => 'admin@user.fr',
-                'role' => ['ROLE_ADMIN']
+                'role' => ['ROLE_ADMIN'],
+                'reference' => 'admin'
+            ],
+            [
+                'email' => 'coordinator@user.fr',
+                'role' => ['ROLE_COORDINATOR'],
+                'reference' => 'coordinator'
             ]
         ];
 
         foreach ($users as $user) {
-            $user = (new User())
+            $object = (new User())
                 ->setEmail($user['email'])
                 ->setRoles($user['role'])
             ;
-            $user->setPassword($this->passwordHasher->hashPassword($user, $pwd));
-            $manager->persist($user);
+            $object->setPassword($this->passwordHasher->hashPassword($object, $pwd));
+            $manager->persist($object);
+            $this->addReference($user['reference'], $object);
         }
 
         for ($i = 0; $i < 10; $i++) {

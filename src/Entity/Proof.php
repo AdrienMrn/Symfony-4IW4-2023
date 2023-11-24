@@ -24,6 +24,14 @@ class Proof
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    private ?bool $validate = null;
+
+    public function __construct()
+    {
+        $this->validate = false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +69,18 @@ class Proof
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function isValidate(): ?bool
+    {
+        return $this->validate;
+    }
+
+    public function setValidate(bool $validate): static
+    {
+        $this->validate = $validate;
 
         return $this;
     }
