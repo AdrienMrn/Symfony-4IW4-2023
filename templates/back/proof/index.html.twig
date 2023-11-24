@@ -21,8 +21,8 @@
                 <td>{{ proof.name }}</td>
                 <td>{{ proof.description }}</td>
                 <td>
-                    <a href="{{ path('app_proof_show', {'id': proof.id}) }}">show</a>
-                    <a href="{{ path('app_proof_edit', {'id': proof.id}) }}">edit</a>
+                    <a href="{{ path('back_app_proof_show', {'id': proof.id}) }}">show</a>
+                    <a href="{{ path('back_app_proof_edit', {'id': proof.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_proof_new') }}">Create new</a>
+    <a href="{{ path('back_app_proof_new') }}">Create new</a>
 {% endblock %}

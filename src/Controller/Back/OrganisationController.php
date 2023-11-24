@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Back;
 
 use App\Entity\Organisation;
 use App\Form\OrganisationType;
+use App\Repository\OrganisationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\OrganisationRepository;
 
 class OrganisationController extends AbstractController
 {
@@ -18,7 +18,7 @@ class OrganisationController extends AbstractController
     {
         $organisations = $organisationRepository->findAll();
 
-        return $this->render('organisation/index.html.twig', [
+        return $this->render('back/organisation/index.html.twig', [
             'organisations' => $organisations
         ]);
     }
@@ -26,7 +26,7 @@ class OrganisationController extends AbstractController
     #[Route('/organisation/{id}', name: 'organisation_show', requirements: ['id' => '\d{1,3}'], methods: 'GET')]
     public function show(Organisation $organisation): Response
     {
-        return $this->render('organisation/show.html.twig', [
+        return $this->render('back/organisation/show.html.twig', [
             'organisation' => $organisation
         ]);
     }
@@ -44,10 +44,10 @@ class OrganisationController extends AbstractController
 
             $this->addFlash('success', 'Création de votre association réalisée!');
 
-            return $this->redirectToRoute('organisation_index');
+            return $this->redirectToRoute('back_organisation_index');
         }
 
-        return $this->render('organisation/new.html.twig', [
+        return $this->render('back/organisation/new.html.twig', [
             'form' => $form
         ]);
     }
@@ -63,12 +63,12 @@ class OrganisationController extends AbstractController
 
             $this->addFlash('success', "Modification de l'association {$organisation->getName()} réalisée!");
 
-            return $this->redirectToRoute('organisation_update', [
+            return $this->redirectToRoute('back_organisation_update', [
                 'id' => $organisation->getId()
             ]);
         }
 
-        return $this->render('organisation/update.html.twig', [
+        return $this->render('back/organisation/update.html.twig', [
             'form' => $form,
             'organisation' => $organisation
         ]);
@@ -84,7 +84,7 @@ class OrganisationController extends AbstractController
             $this->addFlash('success', "Suppression de l'association {$organisation->getName()} réalisée!");
         }
 
-        return $this->redirectToRoute('organisation_index');
+        return $this->redirectToRoute('back_organisation_index');
     }
 }
 

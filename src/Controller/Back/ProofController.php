@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Back;
 
 use App\Entity\Proof;
 use App\Form\ProofType;
@@ -25,7 +25,7 @@ class ProofController extends AbstractController
             $proofs = $proofRepository->findBy(['owner' => $this->getUser()]);
         }
 
-        return $this->render('proof/index.html.twig', [
+        return $this->render('back/proof/index.html.twig', [
             'proofs' => $proofs,
         ]);
     }
@@ -42,27 +42,27 @@ class ProofController extends AbstractController
             $entityManager->persist($proof);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_proof_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_app_proof_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('proof/new.html.twig', [
+        return $this->render('back/proof/new.html.twig', [
             'proof' => $proof,
             'form' => $form,
         ]);
     }
 
     #[Route('/{id}', name: 'app_proof_show', methods: ['GET'])]
-    #[Security('proof.getOwner() === user')]
+    #[Security('is_granted("ROLE_COORDINATOR") or proof.getOwner() === user')]
     public function show(Proof $proof): Response
     {
-        return $this->render('proof/show.html.twig', [
+        return $this->render('back/proof/show.html.twig', [
             'proof' => $proof,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_proof_edit', methods: ['GET', 'POST'])]
     //#[Security('is_granted("ROLE_COORDINATOR") or proof.getOwner() === user')]
-    #[IsGranted('edit', 'proof')]
+    #[Security('is_granted("ROLE_COORDINATOR") or proof.getOwner() === user')]
     public function edit(Request $request, Proof $proof, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ProofType::class, $proof);
@@ -71,10 +71,10 @@ class ProofController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_proof_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_app_proof_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('proof/edit.html.twig', [
+        return $this->render('back/proof/edit.html.twig', [
             'proof' => $proof,
             'form' => $form,
         ]);
@@ -90,6 +90,6 @@ class ProofController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_proof_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('back_app_proof_index', [], Response::HTTP_SEE_OTHER);
     }
 }
