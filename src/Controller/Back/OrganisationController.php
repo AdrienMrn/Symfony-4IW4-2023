@@ -78,7 +78,7 @@ class OrganisationController extends AbstractController
             $this->addFlash('success', "Modification de l'association {$organisation->getName()} réalisée!");
 
             return $this->redirectToRoute('back_organisation_update', [
-                'id' => $organisation->getId()
+                'slug' => $organisation->getSlug()
             ]);
         }
 

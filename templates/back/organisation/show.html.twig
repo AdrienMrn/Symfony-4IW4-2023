@@ -6,4 +6,6 @@
     <h1>Association {{ organisation.name }}</h1>
 
     {{ organisation.name }} {{ organisation.createdAt|date('d/m/Y') }} <br>
+
+    <img src="{{ vich_uploader_asset(organisation, 'logoFile') }}">
 {% endblock %}

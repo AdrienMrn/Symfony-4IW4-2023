@@ -6,17 +6,7 @@
     <h1>Création d'une association</h1>
 
     {{ form_start(form) }}
-
-   <div class="my-4">
-       {{ form_label(form.name) }}
-       {{ form_widget(form.name) }}
-       {{ form_errors(form.name) }}
-   </div>
-
-        {{ form_row(form.description) }}
-        {{ form_row(form.category) }}
-        {{ form_row(form.createdAt) }}
-
+        {{ form_rest(form) }}
         <button type="submit">Créer</button>
     {{ form_end(form) }}
 {% endblock %}

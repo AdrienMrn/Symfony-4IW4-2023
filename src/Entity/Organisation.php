@@ -9,8 +9,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity(repositoryClass: OrganisationRepository::class)]
+#[Vich\Uploadable]
 class Organisation
 {
     use Traits\Timestampable;
@@ -37,6 +40,20 @@ class Organisation
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
+
+    #[Vich\UploadableField(mapping: 'organisationLogo', fileNameProperty: 'logoName')]
+    #[Assert\Image(
+        maxSize: '500k',
+        mimeTypes: ['image/jpeg', 'image/png'],
+        maxHeight: 500,
+        maxSizeMessage: 'Le logo ne doit pas dépasser 500ko.',
+        mimeTypesMessage: 'Le logo doit être au format JPG ou PNG.',
+        maxHeightMessage: 'Le logo ne doit pas dépasser 500px de hauteur.'
+    )]
+    private ?File $logoFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $logoName = null;
 
     #[ORM\OneToMany(mappedBy: 'organisation', targetEntity: Event::class, orphanRemoval: true)]
     private Collection $events;
@@ -99,6 +116,30 @@ class Organisation
         $this->description = $description;
 
         return $this;
+    }
+
+    public function setLogoFile(?File $imageFile = null): void
+    {
+        $this->logoFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getLogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+
+    public function setLogoName(?string $imageName): void
+    {
+        $this->logoName = $imageName;
+    }
+
+    public function getLogoName(): ?string
+    {
+        return $this->logoName;
     }
 
     /**
